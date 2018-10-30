@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,body{
+            width: 100%;
+            height: 100%;
+        }
+        [v-cloak]{
+            display: none;
+        }
+        .pane{
+            float: left;
+            padding: 0 10px;
+        }
+        .tabs{
+            width: 40%;
+            margin: 0 auto;
+        }
+        .tabs-bar::after{
+            display:block;
+            clear:both;
+            content:"";
+            visibility:hidden;
+            height:0;
+        }
+        .tabs-bar{
+            margin-bottom: 4px;
+        }
+        .panelabel{
+            float: left;
+            padding: 0 10px;
+            border: 1px solid black;
+            border-bottom: none;
+            cursor: pointer;
+            margin:0 4px;
+        }
+        .tabs-content .pane{
+            width: 220px;
+            height: 200px;
+            background: yellow;
+            border:1px solid black;
+            box-sizing: border-box;
+        }
+        .active{
+            border-top:3px solid black;
+        }
+        </style>
+</head>
+<body>
+    <div id='app' v-cloak>
+        <tabs>
+            <pane label='标签一' name='1'>
+                标签一的内容一
+            </pane>  
+
+            <pane label='标签二' name='2'>
+                标签二的内容二
+            </pane>  
+
+            <pane label='标签三' name='2'>
+                标签三的内容三
+            </pane>  
+        </tabs>
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script type='text/javascript'>
+
+        Vue.component('pane',{
+            name:'pane',
+            template:`\
+                <div class='pane' v-show='show'>
+                    <slot></slot>
+                </div>
+            `,
+            data:function(){
+                return {
+                    show:true,
+                }
+            },
+            methods:{
+                updateNav(){
+                    this.$parent.updataList();
+                }
+            },
+            mounted(){
+                this.updateNav();
+            }
+
+        })
+
+        Vue.component('tabs',{
+            name:'tabs',
+            template:`\
+                <div class='tabs'>
+                    <div class='tabs-bar'>
+                        <div class='panelabel' v-for='(item,index) in navList' @click='changestatus(index)' :class='{active:index===currentValue}'>
+                            {{item.label}}
+                        </div>
+                    </div>
+                    <div class='tabs-content'>
+                        <slot></slot>
+                    </div>
+                </div>
+            `,
+            data:function(){
+                return {
+                    navList:[],
+                    currentValue:0,
+                    list:[],
+                }
+            },
+
+            methods:{
+                updataList:function(){
+                    this.navList = [];
+                    var that = this;
+                    this.list = this.$children.filter(function (item) {
+                        return item.$options.name === 'pane';
+                    })
+                    this.list.forEach(function(pane,index){
+                        that.navList.push({
+                            label:'标签'+(index+1),
+                            name:index
+                        })
+                    }); 
+                    this.updatastatus();
+             },
+
+                updatastatus:function(){
+                  var that = this;
+                  that.list.forEach(function(pane,index){
+                      return pane.show = that.navList[index].name === that.currentValue ;
+                  })
+             },
+
+                changestatus:function(index){
+                var that = this;
+                this.currentValue = index;
+                this.updatastatus();
+             }     
+            },
+        })
+
+        var app = new Vue({
+            el:'#app',
+            data:{
+                activeKey:'1'
+            }
+        })
+    </script>
+</body>
+</html>

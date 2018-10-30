@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+        }
+        .container{
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            /* 下面的盒子设置为 inline-blcok之后，会有文字空隙 在父盒子设置文字为0 */
+            font-size: 0; 
+        }
+        .box{
+            box-sizing: border-box;
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            border: 3px solid black;
+            margin-left:-3px;
+            margin-top:-3px;
+        }
+        .box:hover{
+            position: relative;
+            border: 3px solid red;
+            z-index: 1000;
+        }
+    </style>
+
+
+
+</head>
+<body>
+    <div>
+        <div class="container">
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+        </div>
+    </div>
+    <script>
+
+
+        // var $ = {
+        //     fn:function(){
+        //         console.log(1);
+        //         this.fn2 = function(){
+        //         console.log(2);
+        //      }
+        //      return this;
+        //     },
+        // }
+        // $.fn().fn2();
+
+
+        // var $ = {
+        //     fn:function(){
+        //         console.log(1);
+        //         return this;
+        //     },
+        //     fn2: function(){
+        //         console.log(2);
+        //     },
+
+        // }
+        // $.fn().fn2();
+
+
+        // var b = {
+        //     a:23,
+        //     c:3,
+        //     d:{
+        //         a:78,
+        //         e:{
+        //             a:100,
+        //             f:function(){
+        //                 return this.a
+        //             }
+        //         }
+        //     }
+        // }
+        // var fn = b.d.e.f;
+        // fn();
+        // b.d.e.f();
+
+
+        // console.log(a);
+        // console.log(b);
+        // var a = 1;
+        // let b=2;
+
+        // var num = diGui(6);
+        // console.log(num)
+        // function diGui( n ){
+        //     if(n<=1){return 1}
+        //     else{
+        //         return n*diGui(n-1);
+        //     }
+        // }
+
+        // var arrTest = [a,1,null,undefined,3,4,[1,3,5,{a:1,b:2,f:[6,7,8]}],{c:3,d:4}];
+        // console.log ( bian(arrTest) );
+
+        // function bian(arr){
+        //     var arrTemp = [] ;
+        //     if( Array.isArray(arr) ){                   //数组则直接扁平化
+        //         for(var i = 0;i < arr.length;i++){
+        //             arrTemp = arrTemp.concat( bian(arr[i]) );
+        //         }
+        //         return arrTemp ;
+        //     }
+        //     else if( typeof arr =='object' && arr !=null ) {          // 对象则递归对象的属性
+        //         for( var a in arr ){
+        //               arrTemp = arrTemp.concat( bian( arr[a] ) );
+        //             }
+        //         return arrTemp ;
+        //     }
+
+        //     if( typeof arr !='object' || arr ==null ) {     //如果是非对象且非null 直接返回
+        //             return arr ;
+        //         };
+        // }
+
+
+        // function a(first){
+        //     return function b(two){
+        //         return function c(three){
+        //             return first*two*three ;
+        //         }
+        //     }
+        // }
+        // console.log(a(2)(3)(4) );
+    </script>
+</body>
+</html>

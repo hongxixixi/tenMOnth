@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var arr = [1,2,1,5,7,10,66,77,33,66,66,33,1,2,3,66,1,1];
+        arr.sort(function(a,b){
+            return a-b;
+        })
+        function unique(arr){
+            var count = 0,moreValue = 0,max = 1;
+            for(let i=0;i<arr.length;i++){
+                if(arr[i]==arr[i+1]){
+                    count ++;
+                    if(count>max){
+                        max = count ;
+                        moreValue = arr[i] ;
+                    }
+                    arr.splice(i,1);
+                    i--;
+                }
+                else{
+                    count = 0;
+                }
+            }
+            return {arr:arr,moreValue:moreValue,max:max+1};
+        }
+        
+        var obj = unique(arr);
+        console.log(obj)
+    </script>
+</body>
+</html>

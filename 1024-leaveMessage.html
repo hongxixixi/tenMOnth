@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .name,.message{
+            width: 160px;
+            height: 22px;
+            border-radius:2px;
+            margin: 5px;
+        }
+        span{
+            display: inline-block;
+            width: 68px;
+        }
+        span+.message{
+            display: inline-block;
+            width: 100px;
+            text-align: center;
+            line-height: 100px;
+            vertical-align: middle;
+        }
+        .message{
+            width: 160px!important;
+            line-height: 28px!important;
+            height: 100px;
+        }
+        button{
+            margin-left: 200px;
+            margin-top:12px;
+        }
+        .list-item{
+            width: 220px;
+            cursor: pointer;
+            border: 1px solid gray;
+            margin: 3px;
+            padding: 3px;
+        }
+        .list-item a{
+            width: 60px;
+            background: gray;
+            border-radius: 2px;
+            text-align: center;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" v-cloak style="width: 500px;margin:0 auto;">
+        <div>
+            <v-input v-model='username'></v-input>      
+            <!-- 子组件里面的value绑定父子件的username -->
+            <v-textarea v-model='message'></v-textarea>
+            <button @click='handleSend'>发布</button>
+        </div>
+        <list :list='list' @reply='handleReply' ></list>
+    </div>
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script>
+        Vue.component('v-input',{
+            // 从父组件传过来的 value
+            props:{ 
+                value:{
+                    type:[String,Number],
+                    default:''
+                }
+            },
+            render:function(h){
+                var that = this;
+                return h('div',[
+                    h('span','昵称:'),
+                    h('input',{
+                        attrs:{
+                            type:'text',
+                            class:'name'
+                        },
+                        domProps:{
+                            value:this.value
+                        },
+                        on:{
+                            input:function(event){
+                                that.value = event.target.value;
+                                that.$emit('input',event.target.value)
+                            }
+                        }
+                    })
+                ]);
+            }
+        })
+        
+        Vue.component('v-textarea',{
+            props:{ 
+                value:{
+                    type:String,
+                    default:''
+                }
+            },
+            render:function(h){
+                var that = this;
+                return h('div',[
+                    h('span','留言内容:'),
+                    h('textarea',{
+                        attrs:{
+                            placeholder:'请输入留言内容',
+                            class:'message'
+                        },
+                        domProps:{
+                            value:this.value
+                        },
+                        ref:'message',
+                        on:{
+                            input:function(event){
+                                that.value = event.target.value;
+                                that.$emit('input',event.target.value);
+                            }
+                        }
+                    })
+                ])
+            },
+            methods:{
+                focus:function(){
+                    this.$refs.message.focus();
+                }
+            }
+        })
+
+        Vue.component('list',{
+            props:{
+                list:{
+                    type:Array,
+                    default:function(){
+                        return [];
+                    }
+                }
+            },
+            render:function(h){
+                var that = this;
+                var nodeList = [];
+                this.list.forEach(function(msg,index){      
+                    var node = h('div',{
+                        attrs:{
+                            class:'list-item'
+                         }
+                      },[
+                           h('span',msg.username+':') ,
+                           h('div',{
+                               attrs:{
+                                   class:'list-msg'
+                               },
+                           }),
+                           h('p',msg.message),
+                           h('a',{
+                               attrs:{
+                                   class:'list-item',
+                               },
+                               on:{
+                                   click:function(){
+                                       that.handleReply(index);
+                                   }
+                               }
+                           },'回复')
+                        ]
+                    )
+                    nodeList.push(node);
+                })
+                return h('div',nodeList)
+            },
+            methods:{
+                handleReply:function(index){
+                    this.$emit('reply',index)
+                }
+            }
+        })
+
+        var app = new Vue({
+            el:'#app',
+            data:{
+                username:'',
+                message:'',
+                list:[]
+            },
+            methods:{
+                handleSend:function(){
+                    if(this.username === ''){
+                        window.alert('请输入昵称');
+                        return ;
+                    }
+                    if(this.message === ''){
+                        window.alert('请输入留言');
+                        return ;
+                    }
+                    this.list.push({
+                        username:this.username,
+                        message:this.message
+                    })
+                },
+                handleReply:function(index){
+                    var name = this.list[index].username;
+                    this.message = '回复@'+name+':';
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>

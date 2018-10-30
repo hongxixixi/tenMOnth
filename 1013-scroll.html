@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container{
+            position: relative;
+            width: 360px;
+            height: 380px;
+            border: 1px solid black;
+            margin: 100px auto;
+        }
+        .contentBox{
+            position: absolute;
+            width: 320px;
+            height: 380px;
+            border: 1px solid red;
+            box-sizing: border-box;  
+            overflow: hidden;
+        }
+        .contentBox .content{
+            position: absolute;
+            font-size: 20px;
+            letter-spacing: 3px;
+          
+        }
+        .srcollBox{
+            position: absolute;
+            width: 40px;
+            height: 380px;
+            border: 1px solid blue;
+            box-sizing: content-box;
+            right: 0;
+        }
+        .srcoll{
+            position: absolute;
+            background: grey;
+            margin:40px 0px;
+            width: 100%;
+        }
+        .srcollBox .top{
+            position: absolute;
+            font-size: 30px;
+            width: 100%; 
+            text-align: center;
+            margin: 0 auto;
+            top:0;
+            background: yellow;
+        }
+        .srcollBox .bottom{
+            position: absolute;
+            font-size: 30px;
+            width: 100%;    
+            text-align: center;
+            margin: 0 auto;
+            bottom: 0px;
+            background: yellow;
+            transform: rotateZ(-90deg);
+        }
+        .srcollBox span{
+            display: inline-block;
+            height: 100%;
+            width: 100%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="contentBox">
+            <div class="content">
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习 
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习 
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习 
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习 
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习 
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习 
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习 
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习 
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习 
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习 
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习 
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习 
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习 
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习
+                我爱学习 我爱学习 我爱学习 我爱学习 我爱学习 
+            </div>
+        </div>
+        <div class="srcollBox">
+            <div class="top">
+                <span>^</span>
+            </div>
+            <div class="srcoll"></div>
+            <div class="bottom">
+                <span><</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function(){
+            var container = document.getElementsByClassName('container')[0];
+            var contentBox = document.getElementsByClassName('contentBox')[0];
+            var content = document.getElementsByClassName('content')[0];
+
+            var srcollBox = document.getElementsByClassName('srcollBox')[0];
+            var srcoll = document.getElementsByClassName('srcoll')[0]
+            var topButton = document.getElementsByClassName('top')[0];
+            var buttomButton = document.getElementsByClassName('bottom')[0];
+            var H,step;
+            srcoll.style.top = 0+'px';
+            content.style.top = 0 +'px'; 
+
+            countHeight();
+            addEvent();
+
+            function countHeight(){
+                H = parseInt((contentBox.offsetHeight/content.offsetHeight)*srcollBox.offsetHeight );
+                srcoll.style.height = H +'px';
+                step = Math.ceil( 8/(300-H)*( content.offsetHeight -container.offsetHeight ) );
+            }
+            
+            function addEvent(){
+                container.onmousedown = function(event){
+                    var e = event||window.event;
+                    if(e.target.parentNode.className == 'top'){
+                        down();
+                    }
+                    else if(e.target.parentNode.className == 'bottom'){
+                        up();
+                    }
+                }
+                container.onmouseover = function wheel(){
+                    container.addEventListener('DOMMouseScroll', addWheel, false);
+                    container.onmousewheel = addWheel;
+                }
+                
+            }
+
+            function addWheel(event){
+                var e = event||window.event;
+                e.preventDefault();
+                if(e.wheelDelta > 0 ){
+                    down();
+                }
+                else{
+                    up();
+                }
+            }
+            
+            function up(){
+                if(parseInt(srcoll.style.top)<=(292-H)){
+                            srcoll.style.top = parseInt(srcoll.style.top) + 8 +'px';
+                            content.style.top =parseInt(content.style.top)-step +'px';
+                        }
+                        else{
+                            srcoll.style.top = 300-H +'px';
+                            content.style.bottom = 0 +'px';
+
+                        }    
+            }
+            function down(){
+                if(parseInt(srcoll.style.top)>8 ){
+                            srcoll.style.top = parseInt(srcoll.style.top) - 8 +'px';
+                            content.style.top = parseInt(content.style.top)+step +'px';
+                        }
+                        else{
+                            srcoll.style.top = 0 +'px';
+                            content.style.top = 0 +'px';
+                        }
+            }
+            
+        })()
+    </script>
+</body>
+</html>

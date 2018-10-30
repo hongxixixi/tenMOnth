@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .container{
+            position: relative;
+            width: 500px;
+            height: 600px;
+            margin: 0 auto;
+            background: grey;
+            border: 1px solid black;
+        }
+        .container .box{
+            transition: top 100ms ease;
+            position: absolute;
+            width: 500px;
+            height: 100px;
+            background: yellow;
+            user-select: none;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box yellow"></div>
+        <div class="box blue"></div>
+        <div class="box pink"></div>
+        <div class="box green"></div>
+        <div class="box white"></div>
+        <div class="box orange"></div>
+    </div>
+    <script>
+        window.onload = function(){
+            var container = document.getElementsByClassName('container')[0];
+            var boxs = container.children;
+            var flag = false;
+
+            init();
+            dragEvent();
+
+            function init(){        //初始化颜色
+                for(let i = 0;i<boxs.length;i++){
+                    boxs[i].style.backgroundColor = boxs[i].classList[1];
+                    boxs[i].style.top = i*100 +'px';
+                }
+            }
+
+            function dragEvent(){
+                var index = 0;
+                container.onmousedown = function(event){
+                    var ev = event || window.event;
+                    flag = true;                         //鼠标按下的标志
+                    var targetDrag = ev.target;          //被拖拽的元素
+                    container.onmousemove = function(event){
+                        if(flag){
+                          var e = event || window.event;
+                          if(targetDrag!=container){                    // 触发事件的不是外面的盒子
+                          if( e.pageY <= 550 ){
+                              targetDrag.style.top = e.pageY-50 + 'px';      //跟着鼠标走
+                              targetDrag.style.zIndex = 1000;
+                            //   container.insertBefore(targetDrag,e);
+                           } 
+                          }
+                        }    
+                     }
+                   
+                    container.onmouseup = function(event){
+                        var ee = event || window.event;
+                        var index = -1;
+                        flag = false;
+                        targetDrag.style.zIndex = ++index ;           //为了让后面拖拽的能覆盖前面的
+                        switch(true){
+                            case ee.pageY<100 && ee.pageY>=0 : index=0;break;
+                            case ee.pageY<200 && ee.pageY>=100 : index=1;break;
+                            case ee.pageY<300 && ee.pageY>=200 : index=2;break;
+                            case ee.pageY<400 && ee.pageY>=300 : index=3;break;
+                            case ee.pageY<500 && ee.pageY>=400 : index=4;break;
+                            case ee.pageY<600 && ee.pageY>=500 : index=5;break;
+                        }
+                    
+                        container.insertBefore(targetDrag,boxs[index].nextSibling);
+                        init();             //重新排列队形
+                    }
+                }
+            }
+
+        }
+    </script>
+</body>
+</html>
