@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.slim.min.js"></script>
+</head>
+<body>
+    <script>
+        var dtd1 = $.Deferred();
+        var dtd2 = $.Deferred();
+
+        function wait1(dtd1){
+            function task(){
+                alert('ok1 !');
+                dtd1.resolve();
+            }
+            setTimeout(task,3000);
+            return dtd1;
+        }
+
+        function wait2(dtd2){
+            function task(){
+                alert('ok2 !');
+                dtd2.resolve();
+            }
+            setTimeout(task,5000);
+            return dtd2;
+        }
+
+        $.when.apply(null,[wait1(dtd1),wait2(dtd2)]).done(function(){
+            alert('done!');
+        }).always(function(){
+            console.log('always !')
+        }).then(function(){console.log('then!')})
+
+        (function a(){
+            console.log('now!')
+        }());
+    </script>
+</body>
+</html>
